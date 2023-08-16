@@ -1,5 +1,6 @@
 package com.pauline.billz.ui
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,8 +8,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.pauline.billz.R
 import com.pauline.billz.databinding.ActivityMainBinding
 import com.pauline.billz.model.RegisterRequest
+import com.pauline.billz.utils.Constants
 import com.pauline.billz.viewmodel.UserViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        redirectUser()
     }
 
     override fun onResume() {
@@ -25,22 +29,24 @@ class MainActivity : AppCompatActivity() {
         binding.tvLogin.setOnClickListener {
             val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent)
+            finish()
         }
 
         binding.btnSignup.setOnClickListener {
             validateSignup()
             clearErrors()
         }
-        userViewModel.errLiveData.observe(this, Observer { err->
-            Toast.makeText(this,err,Toast.LENGTH_LONG).show()
+        userViewModel.errLiveData.observe(this, Observer { err ->
+            Toast.makeText(this, err, Toast.LENGTH_LONG).show()
             binding.pbRegister.visibility = View.GONE
         })
 
-        userViewModel.regLiveData.observe(this, Observer { regResponse->
+        userViewModel.regLiveData.observe(this, Observer { regResponse ->
             binding.pbRegister.visibility = View.GONE
-            Toast.makeText(this,regResponse.message, Toast.LENGTH_LONG).show()
-            startActivity(Intent(this,MainActivity2::class.java))
+            Toast.makeText(this, regResponse.message, Toast.LENGTH_LONG).show()
+            startActivity(Intent(this, MainActivity2::class.java))
         })
+
     }
 
     private fun validateSignup() {
@@ -53,31 +59,31 @@ class MainActivity : AppCompatActivity() {
         var error = false
 
         if (name.isBlank()) {
-            binding.tilName.error = "Enter name"
+            binding.tilName.error = getString(R.string.enter_name)
             error = true
         }
         if (phone.isBlank()) {
-            binding.tilPhone.error = "Enter Phone number"
+            binding.tilPhone.error = getString(R.string.enter_phone_number)
             error = true
         }
 
         if (email.isBlank()) {
-            binding.tilEmail.error = "Enter email adress"
+            binding.tilEmail.error = getString(R.string.enter_email_adress)
             error = true
         }
 
         if (password.isBlank()) {
-            binding.tilPassword.error = "Enter a password"
+            binding.tilPassword.error = getString(R.string.enter_a_password)
             error = true
         }
 
-        if(firstName.isBlank()){
-            binding.tilFirstName.error = "Enter your first Name"
+        if (firstName.isBlank()) {
+            binding.tilFirstName.error = getString(R.string.enter_your_first_name)
             error = true
         }
 
-        if(confirmPassword != password){
-            binding.tilConfirmPassword.error = "Password do not match"
+        if (confirmPassword != password) {
+            binding.tilConfirmPassword.error = getString(R.string.password_do_not_match)
             error = true
         }
 
@@ -102,6 +108,17 @@ class MainActivity : AppCompatActivity() {
         binding.tilEmail.error = null
         binding.tilPassword.error = null
         binding.tilConfirmPassword.error = null
+    }
+
+    fun redirectUser() {
+        val sharedPrefs = getSharedPreferences(Constants.PREFS, Context.MODE_PRIVATE)
+        val userId = sharedPrefs.getString(Constants.USER_ID, Constants.EMPTY_STRING)
+        if (userId.isNullOrBlank()) {
+            startActivity(Intent(this, MainActivity2::class.java))
+        } else {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+        finish()
     }
 }
 

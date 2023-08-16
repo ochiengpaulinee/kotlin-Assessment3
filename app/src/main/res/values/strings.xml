@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Billz</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="enter_your_username">Enter your username</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings">Settings</string>
+    <string name="paid">Paid</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="summary">Summary</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_phone_number">Enter Phone number</string>
+    <string name="enter_email_adress">Enter email adress</string>
+    <string name="enter_a_password">Enter a password</string>
+    <string name="enter_your_first_name">Enter your first Name</string>
+    <string name="password_do_not_match">Password do not match</string>
 </resources>
